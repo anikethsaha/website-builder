@@ -5,19 +5,21 @@ import { FourSplitPropertyValue } from "./components/FourSplitPropertyValue";
 import { BaseStyleSetting } from "./components/BaseStyleSetting";
 import { EditorElementTypes } from "src/app/models/EditorElement";
 import { FontStyleSetting } from "./components/FontStyleSetting";
+import { useDeviceType } from "src/app/stores/editor.store";
 
 const elementsNeedFontStyle = [EditorElementTypes.TEXT];
 
 export const DesignSetting: React.FC<{
   component: EditorComponent<unknown>;
 }> = ({ component }) => {
-  const styles = component.style;
   const { updateStyle } = useEditor();
+  const deviceType = useDeviceType();
+  const styles = component.style?.[deviceType];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log({ [e.target.name]: e.target.value });
     e.preventDefault();
-    updateStyle(component.id, { [e.target.name]: e.target.value });
+    updateStyle(component.id, { [e.target.name]: e.target.value }, deviceType);
   };
 
   return (

@@ -11,6 +11,7 @@ import {
 import { TextValueType } from "../Schemas/TextElement";
 import { StyleHelper } from "src/app/utils/StyleHelper";
 import { useEditor } from "src/app/hooks/useEditor";
+import { useDeviceType } from "src/app/stores/editor.store";
 
 /** TYPES */
 type BaseProps = EditorComponent<TextValueType>;
@@ -23,6 +24,7 @@ export const TextElementComponent = React.forwardRef<
   BaseProps
 >((props, dragRef) => {
   const { setValue } = useEditor();
+  const deviceType = useDeviceType();
   const componentFocusedProps = {
     onInput: (e: any) => {
       setValue<TextValueType>(props, {
@@ -35,7 +37,9 @@ export const TextElementComponent = React.forwardRef<
     <div
       ref={props.preview ? undefined : dragRef}
       style={
-        props.id ? styleHelper.normalizeStyles(props.style ?? {}) : undefined
+        props.id
+          ? styleHelper.normalizeStyles(props.style?.[deviceType] ?? {})
+          : undefined
       }
       className="text-4xl relative cursor-all-scroll font-medium focus-visible:border-none focus-visible:outline-none"
       suppressContentEditableWarning

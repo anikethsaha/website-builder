@@ -6,6 +6,7 @@ import { EditorElement } from "src/app/models/EditorElement";
 import { EditorComponent } from "src/app/models/EditorComponents";
 import { StyleHelper } from "src/app/utils/StyleHelper";
 import { BasicLayoutValueType } from "../Schemas/BasicLayout/Schema";
+import { useDeviceType } from "src/app/stores/editor.store";
 
 type BaseProps = EditorComponent<BasicLayoutValueType> & {
   isDragging?: boolean;
@@ -21,11 +22,13 @@ export const BasicLayoutComponent = React.forwardRef<
   ConnectDragSource,
   BaseProps
 >((props, dragRef) => {
+  const deviceType = useDeviceType();
+
   return (
     <div
       ref={dragRef}
       className="p-2  bg-gray-100 text-gray-500 rounded border border-slate-300 flex flex-row  w-full h-36 justify-between items-center cursor-all-scroll"
-      style={styleHelper.normalizeStyles(props.style ?? {})}
+      style={styleHelper.normalizeStyles(props.style?.[deviceType] ?? {})}
     >
       <div className="text-2xl flex-1 flex justify-center items-center">1</div>
       <div className="text-2xl flex-1 flex justify-center items-center">2</div>

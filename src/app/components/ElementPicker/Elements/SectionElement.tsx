@@ -12,6 +12,7 @@ import { StyleHelper } from "src/app/utils/StyleHelper";
 import { useEditor } from "src/app/hooks/useEditor";
 import { Resizable } from "re-resizable";
 import { SectionValueType } from "../Schemas/Section";
+import { useDeviceType } from "src/app/stores/editor.store";
 
 /** TYPES */
 type BaseProps = EditorComponent<SectionValueType>;
@@ -23,11 +24,13 @@ export const SectionElementComponent = React.forwardRef<
   ConnectDragSource,
   BaseProps
 >((props, dragRef) => {
+  const deviceType = useDeviceType();
+
   if (props.id) {
     return (
       <div
         className="flex flex-col bg-gray-500  h-full w-full"
-        style={styleHelper.normalizeStyles(props.style ?? {})}
+        style={styleHelper.normalizeStyles(props.style?.[deviceType] ?? {})}
       >
         {props.value?.type === "image" ? (
           <img src={props.value?.imageLink} className="w-full h-full" />

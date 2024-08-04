@@ -9,6 +9,7 @@ import { useEditor } from "src/app/hooks/useEditor";
 import { EditorComponent } from "src/app/models/EditorComponents";
 import { useIsEditorDragDisable } from "src/app/hooks/useIsEditorDragDisable";
 import { useDeviceType } from "src/app/stores/editor.store";
+import { DEVICE_TYPES } from "src/app/models/device.mode";
 
 export const Canva = () => {
   const components = useEditorComponents();
@@ -17,38 +18,44 @@ export const Canva = () => {
   const { addComponent, updatePosition, setLayout, removeComponent } =
     useEditor();
 
-  const [{ isOver }, dropRef] = useDrop({
-    accept: ELEMENT_DROP_TYPE,
-    drop(item, monitor) {
-      const component = item as EditorComponent<unknown>;
-      const type = component.type;
-      const position = monitor.getSourceClientOffset();
+  const [{ isOver }, dropRef] = useDrop(
+    {
+      accept: ELEMENT_DROP_TYPE,
+      drop(item, monitor) {
+        const component = item as EditorComponent<unknown>;
+        const type = component.type;
+        const position = monitor.getSourceClientOffset();
+        console.log({ monitor });
 
-      if (component) {
-        if (component.kind === "layouts") {
-          setLayout(component.type);
-        } else {
-          if (!component.id) {
-            addComponent({
-              type,
-              position: {
-                coordinates: position ?? undefined,
-              },
-            });
+        if (component) {
+          if (component.kind === "layouts") {
+            setLayout(component.type);
           } else {
-            // update the position of the component (filter by id)
-            updatePosition(component.id, position!);
+            if (!component.id) {
+              addComponent({
+                type,
+                position: {
+                  [deviceType ?? DEVICE_TYPES.DESKTOP]: {
+                    coordinates: position ?? undefined,
+                  },
+                },
+              });
+            } else {
+              // update the position of the component (filter by id)
+              updatePosition(component.id, position!, deviceType);
+            }
           }
         }
-      }
 
-      return undefined;
+        return undefined;
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
+      }),
     },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  });
+    [deviceType]
+  );
 
   const handleDelete = (e: KeyboardEvent) => {
     if (e.key === "Delete" || e.key === "Backspace") {

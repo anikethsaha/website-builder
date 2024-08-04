@@ -19,11 +19,9 @@ export const ComponentRenderer = <T extends unknown>(
 
     return (
       <ElementAutoLayout component={props}>
-        <ElementFocusLayer component={props}>
-          <ElementResizableLayer component={props}>
-            <ElementToRender {...props} />
-          </ElementResizableLayer>
-        </ElementFocusLayer>
+        <ElementResizableLayer component={props}>
+          <ElementToRender {...props} />
+        </ElementResizableLayer>
       </ElementAutoLayout>
     );
   }

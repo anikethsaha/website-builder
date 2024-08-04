@@ -5,13 +5,14 @@ import { nanoid } from "nanoid";
 import { ComponentProperties } from "../models/ComponentProperties";
 import { XYCoord } from "react-dnd";
 import { LayoutComponentType } from "../models/Layout.models";
+import { DEVICE_TYPES } from "../models/device.mode";
 
 export type EditorState = {
   components: EditorComponent<unknown>[];
   disableDrag?: boolean;
   layoutName?: string;
   previewMode: boolean;
-  deviceType: "desktop" | "mobile";
+  deviceType: DEVICE_TYPES;
 };
 
 export type EditorActions = {
@@ -21,8 +22,16 @@ export type EditorActions = {
   setComponentValue: (componentId: string, value: any) => void;
   focusComponent: (componentId: string) => void;
   clearComponentFocus: (id: string) => void;
-  updatePosition: (componentId: string, position: XYCoord) => void;
-  updateStyle: (componentId: string, style: React.CSSProperties) => void;
+  updatePosition: (
+    componentId: string,
+    position: XYCoord,
+    deviceType?: DEVICE_TYPES
+  ) => void;
+  updateStyle: (
+    componentId: string,
+    style: React.CSSProperties,
+    deviceType: DEVICE_TYPES
+  ) => void;
   updateDisableDrag: (disable: boolean) => void;
   fillComponentsForLayout: (
     components: LayoutComponentType<unknown>[],
@@ -30,13 +39,13 @@ export type EditorActions = {
   ) => void;
   setLayoutName: (name: string) => void;
   togglePreviewMode: () => void;
-  setDeviceType: (deviceType: "desktop" | "mobile") => void;
+  setDeviceType: (deviceType: DEVICE_TYPES) => void;
 };
 
 export const useEditorStore = create<EditorState & EditorActions>((set) => ({
   components: [],
   previewMode: false,
-  deviceType: "desktop",
+  deviceType: DEVICE_TYPES.DESKTOP,
   updateDisableDrag: (disable) => set({ disableDrag: disable }),
   setDeviceType: (deviceType) => set({ deviceType }),
   togglePreviewMode: () =>
@@ -84,23 +93,44 @@ export const useEditorStore = create<EditorState & EditorActions>((set) => ({
         c.id === id ? { ...c, isFocused: false } : c
       ),
     })),
-  updatePosition: (componentId: string, position?: XYCoord) =>
-    set((state) => ({
-      components: state.components.map((c) =>
-        c.id === componentId && position
-          ? { ...c, position: { ...c.position, coordinates: position } }
-          : c
-      ),
-    })),
+  updatePosition: (
+    componentId: string,
+    position?: XYCoord,
+    deviceType: DEVICE_TYPES = DEVICE_TYPES.DESKTOP
+  ) => {
+    return set((state) => ({
+      components: state.components.map((c) => {
+        return c.id === componentId
+          ? {
+              ...c,
+              position: {
+                ...c.position,
+                [deviceType]: { coordinates: position },
+              },
+            }
+          : c;
+      }),
+    }));
+  },
   removeComponent: (id: string) =>
     set((state) => ({
       components: state.components.filter((c) => c.id !== id),
     })),
-  updateStyle: (componentId: string, style: React.CSSProperties) => {
+  updateStyle: (
+    componentId: string,
+    style: React.CSSProperties,
+    deviceType: DEVICE_TYPES = DEVICE_TYPES.DESKTOP
+  ) => {
     return set((state) => ({
       components: state.components.map((c) => {
         return c.id === componentId
-          ? { ...c, style: { ...c.style, ...style } }
+          ? {
+              ...c,
+              style: {
+                ...c.style,
+                [deviceType]: { ...c.style?.[deviceType]!, ...style },
+              },
+            }
           : c;
       }),
     }));

@@ -13,17 +13,12 @@ export const ElementFocusLayer: React.FC<{
   const [isHovered, setIsHovered] = useState(false);
   const id = component.id;
 
-  const focusedStyle = component.isFocused
-    ? " border-2 border-blue-500 p-2 box-border"
-    : "";
-
   return (
     <div
       onClick={() => {
         focusComponent(id);
       }}
       ref={ref}
-      className={focusedStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onMouseDown={() => setIsHovered(false)}

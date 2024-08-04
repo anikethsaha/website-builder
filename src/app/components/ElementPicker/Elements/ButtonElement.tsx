@@ -10,6 +10,8 @@ import { EditorComponent } from "src/app/models/EditorComponents";
 import { ButtonValueType } from "../Schemas/Button";
 import { useEditor } from "src/app/hooks/useEditor";
 import { StyleHelper } from "src/app/utils/StyleHelper";
+import { useDeviceType } from "src/app/stores/editor.store";
+import { DEVICE_TYPES } from "src/app/models/device.mode";
 
 type BaseProps = EditorComponent<ButtonValueType>;
 
@@ -24,6 +26,7 @@ export const ButtonElementComponent = React.forwardRef<
   BaseProps
 >((props, dragRef) => {
   const { setValue } = useEditor();
+  const deviceType = useDeviceType();
 
   const componentFocusedProps = {
     onInput: (e: any) => {
@@ -37,7 +40,7 @@ export const ButtonElementComponent = React.forwardRef<
       suppressContentEditableWarning
       type="button"
       className="py-2 h-12 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 cursor-all-scroll "
-      style={styleHelper.normalizeStyles(props.style ?? {})}
+      style={styleHelper.normalizeStyles(props.style?.[deviceType] ?? {})}
       contentEditable={(props.id && props.isFocused) || !props.preview}
       {...(props.isFocused && props.id ? componentFocusedProps : {})}
     >

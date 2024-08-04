@@ -11,10 +11,13 @@ export const Preview = () => {
 
   useEffect(() => {
     const htmlCode = ReactDOMServer.renderToString(
-      <PreviewComponentRenderer components={components} />
+      <PreviewComponentRenderer
+        components={components}
+        deviceType={deviceType}
+      />
     );
     setHTMLCodeString(htmlCode);
-  }, [JSON.stringify(components)]);
+  }, [JSON.stringify(components), deviceType]);
 
   return (
     <div className="flex flex-col justify-center items-center p-8 flex-1 w-full h-full relative bg-gray-100">
@@ -25,7 +28,7 @@ export const Preview = () => {
       >
         <iframe
           className="w-full h-full"
-          srcdoc={`  
+          srcDoc={`  
               <html >
                 <head>
                     <script src="https://cdn.tailwindcss.com"></script>
