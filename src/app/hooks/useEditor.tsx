@@ -16,6 +16,8 @@ export const useEditor = () => {
   const removeComponent = useEditorStore((state) => state.removeComponent);
   const togglePreviewMode = useEditorStore((state) => state.togglePreviewMode);
   const setDeviceType = useEditorStore((state) => state.setDeviceType);
+    const addChilds = useEditorStore((state) => state.addChilds);
+    const updateChildsPosition = useEditorStore((state) => state.updateChildsPosition);
   const fillLayoutComponents = useEditorStore(
     (state) => state.fillComponentsForLayout
   );
@@ -54,6 +56,10 @@ export const useEditor = () => {
     }
   };
 
+  const appendChildToComponent = (parentId: string, child: EditorElement) => {
+    addChilds(parentId, child);
+  };
+
   return {
     addComponent,
     setValue,
@@ -66,5 +72,7 @@ export const useEditor = () => {
     removeComponent,
     togglePreviewMode,
     setDeviceType,
+    appendChildToComponent,
+    updateChildsPosition,
   };
 };

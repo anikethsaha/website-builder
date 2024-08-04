@@ -44,5 +44,6 @@ export const BasicLayout = withElementDisplayContainer(
     React.RefAttributes<ConnectDragSource> &
       EditorElement &
       ComponentProperties & { isDragging?: boolean | undefined }
-  >
+  >,
+  "layouts"
 );

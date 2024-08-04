@@ -6,8 +6,10 @@ import {
 } from "src/app/models/EditorElement";
 
 import { TextElement } from "./Elements/TextElement";
-import { SectionElement } from "./Elements/SectionElement";
+import { BoxElement } from "./Elements/BoxElement";
 import { BasicLayout } from "./Layouts/BasicLayout";
+import { FlexElement } from "./Elements/FlexElement";
+import { InputElement } from "./Elements/InputElement";
 
 enum PICKER_TYPES {
   COMPONENTS = "COMPONENTS",
@@ -46,7 +48,8 @@ export const ElementPicker = () => {
         <div className="flex flex-col gap-2   mt-4 px-4">
           <ButtonElement type={EditorElementTypes.BUTTON} />
           <TextElement type={EditorElementTypes.TEXT} />
-          <SectionElement type={EditorElementTypes.SECTION} />
+          <BoxElement type={EditorElementTypes.BOX} />
+          <InputElement type={EditorElementTypes.INPUT} />
         </div>
       ) : (
         <div className="flex flex-col gap-2   mt-4 px-4">

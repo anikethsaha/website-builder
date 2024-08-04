@@ -25,7 +25,7 @@ export const Canva = () => {
         const component = item as EditorComponent<unknown>;
         const type = component.type;
         const position = monitor.getSourceClientOffset();
-        console.log({ monitor });
+        console.log("adding, ", { component });
 
         if (component) {
           if (component.kind === "layouts") {
@@ -33,6 +33,7 @@ export const Canva = () => {
           } else {
             if (!component.id) {
               addComponent({
+                ...component,
                 type,
                 position: {
                   [deviceType ?? DEVICE_TYPES.DESKTOP]: {

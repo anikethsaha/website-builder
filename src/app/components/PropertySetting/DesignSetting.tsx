@@ -7,7 +7,11 @@ import { EditorElementTypes } from "src/app/models/EditorElement";
 import { FontStyleSetting } from "./components/FontStyleSetting";
 import { useDeviceType } from "src/app/stores/editor.store";
 
-const elementsNeedFontStyle = [EditorElementTypes.TEXT];
+const elementsNeedFontStyle = [
+  EditorElementTypes.TEXT,
+  EditorElementTypes.BUTTON,
+  EditorElementTypes.INPUT,
+];
 
 export const DesignSetting: React.FC<{
   component: EditorComponent<unknown>;

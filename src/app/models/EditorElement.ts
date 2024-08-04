@@ -1,7 +1,9 @@
 export enum EditorElementTypes {
   BUTTON = "BUTTON",
   TEXT = "TEXT",
-  SECTION = "SECTION",
+  BOX = "BOX",
+  FLEX = "FLEX",
+  INPUT = "INPUT",
 }
 
 export enum LayoutElementTypes {
@@ -13,5 +15,11 @@ export enum LayoutElementTypes {
  */
 export type EditorElement = {
   type: EditorElementTypes | LayoutElementTypes;
-  kind?: "elements" | "layouts";
+
+  /**
+   * @elements are the basic components, atoms
+   * @layouts are the group of elements
+   * @sections are the one that contains their own layout handler
+   */
+  kind?: "elements" | "layouts" | "section";
 };

@@ -9,8 +9,9 @@ import { useEditor } from "src/app/hooks/useEditor";
 import { StyleHelper } from "src/app/utils/StyleHelper";
 import { useDeviceType } from "src/app/stores/editor.store";
 import { DEVICE_TYPES } from "src/app/models/device.mode";
+import { InputValueType } from "../Schemas/Input";
 
-type BaseProps = EditorComponent<ButtonValueType>;
+type BaseProps = EditorComponent<InputValueType>;
 
 const styleHelper = new StyleHelper();
 
@@ -18,40 +19,44 @@ const styleHelper = new StyleHelper();
  * This is the component that will render the component in the canvas as Component
  * as well as this is the component that will be rendered in the element picker as Element
  */
-export const ButtonElementComponent = React.forwardRef<
+export const InputElementComponent = React.forwardRef<
   ConnectDragSource,
   BaseProps
 >((props, dragRef) => {
-  const { setValue } = useEditor();
   const deviceType = useDeviceType();
-
-  const componentFocusedProps = {
-    onInput: (e: any) => {
-      setValue<ButtonValueType>(props, { text: e.currentTarget.textContent });
-    },
-  };
-
   return (
     <div
+      className="w-full md:w-1/2 px-3"
       ref={props.preview ? undefined : dragRef}
-      suppressContentEditableWarning
-      type="button"
-      className="py-2 h-12 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 cursor-all-scroll "
       style={styleHelper.normalizeStyles(props.style?.[deviceType] ?? {})}
-      contentEditable={(props.id && props.isFocused) || !props.preview}
-      {...(props.isFocused && props.id ? componentFocusedProps : {})}
     >
-      {props.value?.text ?? "Button"}
+      <label
+        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+        htmlFor={props.value?.id ?? "grid-last-name"}
+      >
+        {props.value?.label ?? "Label"}
+      </label>
+      <input
+        disabled={props.preview || !props.id}
+        className={`${
+          props.id ? "py-2 px-4" : "py-1 px-2"
+        }  appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded  leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
+        id={props.value?.id ?? "grid-last-name"}
+        type={props.value?.type ?? "text"}
+        placeholder={props.value?.placeholder ?? "Doe"}
+      />
     </div>
   );
 });
 
-ButtonElementComponent.displayName = "ButtonElement";
+InputElementComponent.displayName = "InputElement";
 
-export const ButtonElement = withElementDisplayContainer(
-  ButtonElementComponent as React.ForwardRefExoticComponent<
+export const InputElement = withElementDisplayContainer(
+  InputElementComponent as React.ForwardRefExoticComponent<
     React.RefAttributes<ConnectDragSource> &
       EditorElement &
       ComponentProperties & { isDragging?: boolean | undefined }
-  >
+  >,
+  "elements",
+  { style: { [DEVICE_TYPES.DESKTOP]: { width: 390 } } }
 );

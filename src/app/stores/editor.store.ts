@@ -1,6 +1,6 @@
 import { EditorComponent } from "src/app/models/EditorComponents";
 import { create } from "zustand";
-import { EditorElement, EditorElementTypes } from "../models/EditorElement";
+import { EditorElement } from "../models/EditorElement";
 import { nanoid } from "nanoid";
 import { ComponentProperties } from "../models/ComponentProperties";
 import { XYCoord } from "react-dnd";
@@ -27,6 +27,12 @@ export type EditorActions = {
     position: XYCoord,
     deviceType?: DEVICE_TYPES
   ) => void;
+  updateChildsPosition: (
+    parentId: string,
+    childId: string,
+    position: XYCoord,
+    deviceType?: DEVICE_TYPES
+  ) => void;
   updateStyle: (
     componentId: string,
     style: React.CSSProperties,
@@ -40,6 +46,7 @@ export type EditorActions = {
   setLayoutName: (name: string) => void;
   togglePreviewMode: () => void;
   setDeviceType: (deviceType: DEVICE_TYPES) => void;
+  addChilds: (parentId: string, child: EditorElement) => void;
 };
 
 export const useEditorStore = create<EditorState & EditorActions>((set) => ({
@@ -59,7 +66,6 @@ export const useEditorStore = create<EditorState & EditorActions>((set) => ({
           ...component,
           id: nanoid(),
           isFocused: true,
-          style: {},
         } as EditorComponent<unknown>,
       ],
     })),
@@ -136,6 +142,53 @@ export const useEditorStore = create<EditorState & EditorActions>((set) => ({
     }));
   },
   clearComponents: () => set({ components: [] }),
+  addChilds: (parentId: string, child: EditorElement) =>
+    set((state) => ({
+      components: state.components.map((c) => {
+        if (c.id === parentId) {
+          return {
+            ...c,
+            childs: [
+              ...(c.childs ?? []),
+              {
+                ...child,
+                id: `${c.id}-${nanoid()}`,
+                isFocused: true,
+                style: {},
+              },
+            ],
+          };
+        }
+        return c;
+      }),
+    })),
+  updateChildsPosition: (
+    parentId: string,
+    childId: string,
+    position: XYCoord,
+    deviceType: DEVICE_TYPES = DEVICE_TYPES.DESKTOP
+  ) =>
+    set((state) => ({
+      components: state.components.map((c) => {
+        if (c.id === parentId && c.childs) {
+          return {
+            ...c,
+            childs: c.childs.map((child) => {
+              return child.id === childId
+                ? {
+                    ...child,
+                    position: {
+                      ...child.position,
+                      [deviceType]: { coordinates: position },
+                    },
+                  }
+                : child;
+            }),
+          };
+        }
+        return c;
+      }),
+    })),
 }));
 
 export const usePreviewMode = () =>

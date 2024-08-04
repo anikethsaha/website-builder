@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { useDrag } from "react-dnd";
 import { ELEMENT_DROP_TYPE } from "src/app/constants/EditorDatas";
 import { useIsEditorDragDisable } from "src/app/hooks/useIsEditorDragDisable";
@@ -41,6 +41,10 @@ export const ElementAutoLayout: React.FC<{
     }),
     [JSON.stringify(component), deviceType]
   );
+
+  if (component.kind === "section") {
+    return <>{children}</>;
+  }
 
   if (isDragDisabled)
     return (

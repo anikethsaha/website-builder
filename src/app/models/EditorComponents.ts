@@ -1,7 +1,7 @@
 import { ComponentProperties } from "./ComponentProperties";
 import { EditorElement } from "./EditorElement";
 
-export type EditorComponent<V> = {
+type BaseEditComponent<V> = {
   id: string;
   isFocused?: boolean;
   value?: V;
@@ -9,3 +9,8 @@ export type EditorComponent<V> = {
   preview?: boolean;
 } & EditorElement &
   ComponentProperties;
+
+export type EditorComponent<V> = BaseEditComponent<V> & {
+  /** @unused atm */
+  childs?: EditorComponent<V>[];
+};

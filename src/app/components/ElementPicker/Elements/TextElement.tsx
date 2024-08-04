@@ -4,10 +4,7 @@ import { Resizable, ResizableProps } from "re-resizable";
 import { withElementDisplayContainer } from "src/app/hocs/withElementDisplayContainer";
 import { ComponentProperties } from "src/app/models/ComponentProperties";
 import { EditorComponent } from "src/app/models/EditorComponents";
-import {
-  EditorElement,
-  EditorElementTypes,
-} from "src/app/models/EditorElement";
+import { EditorElement } from "src/app/models/EditorElement";
 import { TextValueType } from "../Schemas/TextElement";
 import { StyleHelper } from "src/app/utils/StyleHelper";
 import { useEditor } from "src/app/hooks/useEditor";

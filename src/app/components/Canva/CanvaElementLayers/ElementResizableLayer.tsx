@@ -15,9 +15,18 @@ export const ElementResizableLayer: React.FC<{
   const deviceType = useDeviceType();
 
   const style = component.style?.[deviceType ?? DEVICE_TYPES.DESKTOP];
+  console.log({ style });
 
   const defaultWidth = style?.width ? Number(style?.width) : 100;
   const defaultHeight = style?.height ? Number(style?.height) : 100;
+
+  if (component.kind === "section") {
+    return <>{children}</>;
+  }
+
+  if (!component.isFocused) {
+    return <>{children}</>;
+  }
 
   return (
     <Resizable
@@ -50,11 +59,14 @@ export const ElementResizableLayer: React.FC<{
         const height = ref.clientHeight;
         const width = ref.clientWidth;
         if (d?.height || d.width) {
-          updateStyle(component.id, {
-            height,
-            width,
-            deviceType,
-          });
+          updateStyle(
+            component.id,
+            {
+              height,
+              width,
+            },
+            deviceType
+          );
         }
 
         updateDisableDrag(false);

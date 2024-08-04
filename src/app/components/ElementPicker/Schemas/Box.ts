@@ -1,7 +1,7 @@
 import { RJSFSchema } from "@rjsf/utils";
 
-export const SectionSchema: RJSFSchema = {
-  description: "Configure section properties",
+export const BoxSchema: RJSFSchema = {
+  description: "Configure box properties",
   properties: {
     type: {
       enum: ["none", "image"],
@@ -36,7 +36,7 @@ export const SectionSchema: RJSFSchema = {
   ],
 };
 
-export type SectionValueType = {
+export type BoxValueType = {
   type: "none" | "image";
   imageLink?: string;
 };

@@ -2,6 +2,7 @@ import React, { LegacyRef } from "react";
 import { ConnectDragSource, useDrag } from "react-dnd";
 import { EditorElement } from "../models/EditorElement";
 import { ELEMENT_DROP_TYPE } from "../constants/EditorDatas";
+import { EditorComponent } from "../models/EditorComponents";
 
 export type ElementPropType = {
   isDragging: boolean;
@@ -11,16 +12,18 @@ interface DropResult {
   name: string;
 }
 
-export const withElementDisplayContainer = (
+export const withElementDisplayContainer = <T extends unknown>(
   Element: React.ForwardRefExoticComponent<
     React.RefAttributes<ConnectDragSource> &
       EditorElement & { isDragging?: boolean }
-  >
+  >,
+  kind: EditorElement["kind"] = "elements",
+  defaultComponentValue?: Omit<Omit<EditorComponent<T>, "id">, "type">
 ) => {
   const ElementDisplayContainer: React.FC<EditorElement> = (props) => {
     const [{ isDragging }, dragRef] = useDrag({
       type: ELEMENT_DROP_TYPE,
-      item: { ...props },
+      item: { ...props, ...defaultComponentValue, kind },
 
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
