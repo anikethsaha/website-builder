@@ -17,7 +17,7 @@ export const Preview = () => {
   }, [JSON.stringify(components)]);
 
   return (
-    <div className="flex flex-col justify-center items-center p-8 flex-1 w-full h-full relative bg-slate-100">
+    <div className="flex flex-col justify-center items-center p-8 flex-1 w-full h-full relative bg-gray-100">
       <div
         className={`${
           deviceType === "mobile" ? "w-1/5" : "w-2/3"

@@ -71,7 +71,7 @@ export const Canva = () => {
   }, [JSON.stringify(components)]);
 
   return (
-    <div className="flex justify-center items-center  flex-1 w-full h-full bg-slate-100">
+    <div className="flex justify-center items-center  flex-1 w-full h-full bg-gray-100">
       <div
         ref={isDragDisabled ? undefined : dropRef}
         className={`flex m-8    h-3/4   rounded relative ${
