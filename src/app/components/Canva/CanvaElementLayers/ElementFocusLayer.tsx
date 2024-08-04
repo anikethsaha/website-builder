@@ -1,5 +1,4 @@
-import { useOutsideClick } from "@chakra-ui/react";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { useEditor } from "src/app/hooks/useEditor";
 
@@ -10,15 +9,9 @@ export const ElementFocusLayer: React.FC<{
   component: EditorComponent<T>;
 }> = ({ children, component }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const { focusComponent, clearCompoenntFocus } = useEditor();
+  const { focusComponent } = useEditor();
+  const [isHovered, setIsHovered] = useState(false);
   const id = component.id;
-
-  // useOutsideClick({
-  //   ref,
-  //   handler() {
-  //     clearCompoenntFocus(id);
-  //   },
-  // });
 
   const focusedStyle = component.isFocused
     ? " border-2 border-blue-500 p-2 box-border"
@@ -27,13 +20,39 @@ export const ElementFocusLayer: React.FC<{
   return (
     <div
       onClick={() => {
-        console.log("on click", id);
         focusComponent(id);
       }}
       ref={ref}
       className={focusedStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onMouseDown={() => setIsHovered(false)}
+      onMouseOut={() => setIsHovered(false)}
     >
       {children}
+      {/* {false ? (
+        <div className="relative ">
+          <div
+            style={{ zIndex: 9 }}
+            className="w-screen h-screen absolute bottom-1/2 right-1/2   border border-red-300 border-dashed overflow-hidden"
+          ></div>
+          <div
+            style={{ zIndex: 9 }}
+            className="w-screen h-screen absolute bottom-1/2 left-1/2  border border-red-300 border-dashed overflow-hidden "
+          ></div>
+          <div
+            style={{ zIndex: 9 }}
+            className="w-screen h-screen absolute top-1/2 right-1/2  border border-red-300 border-dashed overflow-hidden"
+          ></div>
+          <div
+            style={{ zIndex: 9 }}
+            className="w-screen h-screen absolute top-1/2 left-1/2   border border-red-300 border-dashed overflow-hidden"
+          ></div>
+          <div style={{ zIndex: 10, position: "relative" }}>{children}</div>
+        </div>
+      ) : (
+        children
+      )} */}
     </div>
   );
 };

@@ -15,6 +15,8 @@ export const DesignSetting: React.FC<{
   const { updateStyle } = useEditor();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log({ [e.target.name]: e.target.value });
+    e.preventDefault();
     updateStyle(component.id, { [e.target.name]: e.target.value });
   };
 

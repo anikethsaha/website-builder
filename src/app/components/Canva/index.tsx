@@ -1,35 +1,44 @@
-import React, { use, useEffect, useState } from "react";
+import React, { use, useCallback, useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
 import { ButtonElement } from "../ElementPicker/Elements/ButtonElement";
 import { useEditorComponents } from "src/app/hooks/useEditorComponent";
 import { ComponentRenderer } from "./ComponentRenderer";
-import { NAME } from "src/app/constants/EditorDatas";
-import { EditorElement } from "src/app/models/EditorElement";
+import { ELEMENT_DROP_TYPE } from "src/app/constants/EditorDatas";
+
 import { useEditor } from "src/app/hooks/useEditor";
 import { EditorComponent } from "src/app/models/EditorComponents";
+import { useIsEditorDragDisable } from "src/app/hooks/useIsEditorDragDisable";
+import { useDeviceType } from "src/app/stores/editor.store";
 
 export const Canva = () => {
   const components = useEditorComponents();
-  const { addComponent, updatePosition } = useEditor();
+  const isDragDisabled = useIsEditorDragDisable();
+  const deviceType = useDeviceType();
+  const { addComponent, updatePosition, setLayout, removeComponent } =
+    useEditor();
 
   const [{ isOver }, dropRef] = useDrop({
-    accept: NAME,
+    accept: ELEMENT_DROP_TYPE,
     drop(item, monitor) {
       const component = item as EditorComponent<unknown>;
       const type = component.type;
       const position = monitor.getSourceClientOffset();
 
       if (component) {
-        if (!component.id) {
-          addComponent({
-            type,
-            position: {
-              coordinates: position ?? undefined,
-            },
-          });
+        if (component.kind === "layouts") {
+          setLayout(component.type);
         } else {
-          // update the position of the component (filter by id)
-          updatePosition(component.id, position!);
+          if (!component.id) {
+            addComponent({
+              type,
+              position: {
+                coordinates: position ?? undefined,
+              },
+            });
+          } else {
+            // update the position of the component (filter by id)
+            updatePosition(component.id, position!);
+          }
         }
       }
 
@@ -41,17 +50,33 @@ export const Canva = () => {
     }),
   });
 
+  const handleDelete = (e: KeyboardEvent) => {
+    if (e.key === "Delete" || e.key === "Backspace") {
+      const focusedComponent = components.find((c) => c.isFocused);
+      if (focusedComponent?.isFocused) {
+        removeComponent(focusedComponent.id);
+      }
+    }
+  };
+
+  /**
+   * useeffect to add a keydown event listener to delete the selected component or the focused component
+   */
   useEffect(() => {
     console.log({ components });
-  }, [components]);
+    // window.addEventListener("keydown", handleDelete);
+    // return () => {
+    //   window.removeEventListener("keydown", handleDelete);
+    // };
+  }, [JSON.stringify(components)]);
 
   return (
-    <div className="flex mt-12 flex-1 w-full h-full ">
+    <div className="flex justify-center items-center  flex-1 w-full h-full bg-slate-100">
       <div
-        ref={dropRef}
-        className={`flex flex-1 w-full h-full relative ${
-          isOver ? "bg-slate-200" : "bg-slate-100"
-        }`}
+        ref={isDragDisabled ? undefined : dropRef}
+        className={`flex m-8    h-3/4   rounded relative ${
+          isOver ? "bg-slate-50" : "bg-white"
+        } ${deviceType === "mobile" ? "w-2/5" : "w-full"}`}
       >
         {components.map((component) => (
           <ComponentRenderer key={component.id} {...component} />

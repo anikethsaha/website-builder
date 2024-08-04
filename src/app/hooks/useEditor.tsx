@@ -1,7 +1,8 @@
 import { SCHEMA_MAP } from "../components/PropertySetting/constants/SCHEMA_MAP";
+import { LAYOUT_COMPONENT_MAP } from "../constants/LAYOUT_COMPONENT_MAP";
 import { ComponentProperties } from "../models/ComponentProperties";
 import { EditorComponent } from "../models/EditorComponents";
-import { EditorElement } from "../models/EditorElement";
+import { EditorElement, LayoutElementTypes } from "../models/EditorElement";
 import { useEditorStore } from "../stores/editor.store";
 import validator from "@rjsf/validator-ajv8";
 
@@ -11,6 +12,13 @@ export const useEditor = () => {
   const focusComponent = useEditorStore((state) => state.focusComponent);
   const updatePosition = useEditorStore((state) => state.updatePosition);
   const updateStyle = useEditorStore((state) => state.updateStyle);
+  const updateDisableDrag = useEditorStore((state) => state.updateDisableDrag);
+  const removeComponent = useEditorStore((state) => state.removeComponent);
+  const togglePreviewMode = useEditorStore((state) => state.togglePreviewMode);
+  const setDeviceType = useEditorStore((state) => state.setDeviceType);
+  const fillLayoutComponents = useEditorStore(
+    (state) => state.fillComponentsForLayout
+  );
 
   const clearCompoenntFocus = useEditorStore(
     (state) => state.clearComponentFocus
@@ -37,6 +45,15 @@ export const useEditor = () => {
     setComponentValue(component.id, value);
   };
 
+  const setLayout = (layoutName: string) => {
+    const componentList =
+      LAYOUT_COMPONENT_MAP[layoutName as LayoutElementTypes];
+
+    if (componentList) {
+      fillLayoutComponents(componentList, layoutName);
+    }
+  };
+
   return {
     addComponent,
     setValue,
@@ -44,5 +61,10 @@ export const useEditor = () => {
     clearCompoenntFocus,
     updatePosition,
     updateStyle,
+    updateDisableDrag,
+    setLayout,
+    removeComponent,
+    togglePreviewMode,
+    setDeviceType,
   };
 };

@@ -29,7 +29,7 @@ export const FourSplitPropertyValue: React.FC<{
                 {direction}
               </label>
               <input
-                type="text"
+                type="number"
                 placeholder="Eg: 10px"
                 className="flex-1 w-full py-2 px-4 block bg-gray-100 border-transparent rounded text-sm focus:border-blue-500 focus:ring-blue-500"
                 name={directionName}

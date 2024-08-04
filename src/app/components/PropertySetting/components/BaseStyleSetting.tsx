@@ -11,7 +11,7 @@ export const BaseStyleSetting: React.FC<{
           Width:
         </label>
         <input
-          type="text"
+          type="number"
           placeholder="Eg: 100px"
           className="w-full py-2 px-4 block bg-gray-100 border-transparent rounded text-sm focus:border-blue-500 focus:ring-blue-500"
           name="width"
@@ -24,7 +24,7 @@ export const BaseStyleSetting: React.FC<{
           Height:
         </label>
         <input
-          type="text"
+          type="number"
           placeholder="Eg: 100px"
           className="w-full py-2 px-4 block bg-gray-100 border-transparent rounded text-sm focus:border-blue-500 focus:ring-blue-500"
           name="height"
@@ -50,7 +50,7 @@ export const BaseStyleSetting: React.FC<{
           Border Radius:
         </label>
         <input
-          type="text"
+          type="number"
           placeholder="Eg: 10px"
           className="w-full py-2 px-4 block bg-gray-100 border-transparent rounded text-sm focus:border-blue-500 focus:ring-blue-500"
           name="borderRadius"

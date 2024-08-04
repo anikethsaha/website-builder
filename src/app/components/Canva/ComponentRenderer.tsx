@@ -3,6 +3,7 @@ import { EditorComponent } from "src/app/models/EditorComponents";
 import { ElementTypeMap } from "./contants/ElementTypeMap";
 import { ElementAutoLayout } from "./CanvaElementLayers/ElementAutoLayout";
 import { ElementFocusLayer } from "./CanvaElementLayers/ElementFocusLayer";
+import { ElementResizableLayer } from "./CanvaElementLayers/ElementResizableLayer";
 
 /**
  * This is the component that will render the component in the canvas
@@ -15,10 +16,13 @@ export const ComponentRenderer = <T extends unknown>(
 ) => {
   if (ElementTypeMap[props.type]) {
     const ElementToRender = ElementTypeMap[props.type];
+
     return (
       <ElementAutoLayout component={props}>
         <ElementFocusLayer component={props}>
-          <ElementToRender {...props} />
+          <ElementResizableLayer component={props}>
+            <ElementToRender {...props} />
+          </ElementResizableLayer>
         </ElementFocusLayer>
       </ElementAutoLayout>
     );

@@ -11,9 +11,7 @@ import { ButtonValueType } from "../Schemas/Button";
 import { useEditor } from "src/app/hooks/useEditor";
 import { StyleHelper } from "src/app/utils/StyleHelper";
 
-type BaseProps = EditorComponent<ButtonValueType> & {
-  isDragging?: boolean;
-};
+type BaseProps = EditorComponent<ButtonValueType>;
 
 const styleHelper = new StyleHelper();
 
@@ -35,12 +33,12 @@ export const ButtonElementComponent = React.forwardRef<
 
   return (
     <div
-      ref={dragRef}
+      ref={props.preview ? undefined : dragRef}
       suppressContentEditableWarning
       type="button"
       className="py-2 h-12 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 cursor-all-scroll "
       style={styleHelper.normalizeStyles(props.style ?? {})}
-      contentEditable={props.isFocused}
+      contentEditable={(props.id && props.isFocused) || !props.preview}
       {...(props.isFocused && props.id ? componentFocusedProps : {})}
     >
       {props.value?.text ?? "Button"}
@@ -55,6 +53,5 @@ export const ButtonElement = withElementDisplayContainer(
     React.RefAttributes<ConnectDragSource> &
       EditorElement &
       ComponentProperties & { isDragging?: boolean | undefined }
-  >,
-  EditorElementTypes.BUTTON
+  >
 );

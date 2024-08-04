@@ -1,9 +1,7 @@
 import React, { LegacyRef } from "react";
 import { ConnectDragSource, useDrag } from "react-dnd";
-import { useEditor } from "../hooks/useEditor";
-import { EditorElement, EditorElementTypes } from "../models/EditorElement";
-import { EditorComponent } from "../models/EditorComponents";
-import { NAME } from "../constants/EditorDatas";
+import { EditorElement } from "../models/EditorElement";
+import { ELEMENT_DROP_TYPE } from "../constants/EditorDatas";
 
 export type ElementPropType = {
   isDragging: boolean;
@@ -17,12 +15,11 @@ export const withElementDisplayContainer = (
   Element: React.ForwardRefExoticComponent<
     React.RefAttributes<ConnectDragSource> &
       EditorElement & { isDragging?: boolean }
-  >,
-  type: EditorElementTypes
+  >
 ) => {
   const ElementDisplayContainer: React.FC<EditorElement> = (props) => {
     const [{ isDragging }, dragRef] = useDrag({
-      type: NAME,
+      type: ELEMENT_DROP_TYPE,
       item: { ...props },
 
       collect: (monitor) => ({
@@ -32,7 +29,12 @@ export const withElementDisplayContainer = (
     });
 
     return (
-      <div className="p-12 border border-slate-300 rounded-lg box-border flex flex-1 justify-center items-center bg-sky-50">
+      <div
+        className={
+          (props.kind === "layouts" ? "min-h-52" : "min-h-32") +
+          " p-4 border border-slate-300 rounded-lg box-border flex flex-1 justify-center items-center bg-sky-50 flex-col"
+        }
+      >
         <Element
           {...props}
           isDragging={isDragging}

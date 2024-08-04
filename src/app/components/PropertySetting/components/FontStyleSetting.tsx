@@ -26,7 +26,7 @@ export const FontStyleSetting: React.FC<{
             Font Size:
           </label>
           <input
-            type="text"
+            type="number"
             placeholder="Eg: 16px"
             className="w-full py-2 px-4 block bg-gray-100 border-transparent rounded text-sm focus:border-blue-500 focus:ring-blue-500"
             name="fontSize"

@@ -1,20 +1,58 @@
 import React from "react";
 import { ButtonElement } from "./Elements/ButtonElement";
-import { EditorElementTypes } from "src/app/models/EditorElement";
-import { EditorComponent } from "src/app/models/EditorComponents";
-import { TextComponent } from "./Elements/TextElement";
+import {
+  EditorElementTypes,
+  LayoutElementTypes,
+} from "src/app/models/EditorElement";
+
+import { TextElement } from "./Elements/TextElement";
+import { SectionElement } from "./Elements/SectionElement";
+import { BasicLayout } from "./Layouts/BasicLayout";
+
+enum PICKER_TYPES {
+  COMPONENTS = "COMPONENTS",
+  LAYOUTS = "LAYOUTS",
+}
 
 export const ElementPicker = () => {
+  const [pickerType, setPickerType] = React.useState(PICKER_TYPES.COMPONENTS);
+
   return (
-    <div className="w-96  mt-12 	h-full border-r-slate-300 border-r bg-white flex flex-col p-4">
-      <div className=" text-sm text-gray-500 font-semibold text-left">
-        Select Elements
+    <div className="w-96  	h-full border-r-slate-300 border-r bg-white">
+      <div className="p-3 border-b flex flex-row gap-3">
+        <div
+          className={`text-xs font-semibold cursor-pointer  ${
+            pickerType === PICKER_TYPES.COMPONENTS
+              ? "text-gray-600"
+              : "text-gray-400 hover:text-gray-500"
+          }`}
+          onClick={() => setPickerType(PICKER_TYPES.COMPONENTS)}
+        >
+          Components
+        </div>
+        <div
+          className={`text-xs font-semibold  cursor-pointer hover:text-gray-500 ${
+            pickerType === PICKER_TYPES.LAYOUTS
+              ? "text-gray-600"
+              : "text-gray-400 hover:text-gray-500"
+          }`}
+          onClick={() => setPickerType(PICKER_TYPES.LAYOUTS)}
+        >
+          Layouts
+        </div>
       </div>
 
-      <div className="flex flex-col gap-2   mt-4">
-        <ButtonElement type={EditorElementTypes.BUTTON} />
-        <TextComponent type={EditorElementTypes.TEXT} />
-      </div>
+      {pickerType === PICKER_TYPES.COMPONENTS ? (
+        <div className="flex flex-col gap-2   mt-4 px-4">
+          <ButtonElement type={EditorElementTypes.BUTTON} />
+          <TextElement type={EditorElementTypes.TEXT} />
+          <SectionElement type={EditorElementTypes.SECTION} />
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2   mt-4 px-4">
+          <BasicLayout type={LayoutElementTypes.BASIC} kind="layouts" />
+        </div>
+      )}
     </div>
   );
 };

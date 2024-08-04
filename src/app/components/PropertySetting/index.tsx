@@ -24,7 +24,7 @@ export const PropertySetting = () => {
   };
 
   return (
-    <div className="w-96  mt-12 	h-full border-l-slate-300 border-l bg-white">
+    <div className="w-96  	h-full border-l-slate-300 border-l bg-white">
       <div className="p-3 border-b flex flex-row gap-3">
         <div
           className={`text-xs font-semibold cursor-pointer  ${
